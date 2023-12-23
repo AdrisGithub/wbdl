@@ -152,7 +152,7 @@ impl TryFrom<&str> for Hour {
 impl TryFrom<(&str, u16, Month)> for Day {
     type Error = WBDLError;
     fn try_from(value: (&str, u16, Month)) -> Result<Self, Self::Error> {
-        Ok(Day::try_from((u8::from_str(value.0).map_err(|_err| WBDLError)?, value.1, value.2)).map_err(|_err| WBDLError)?)
+        Day::try_from((u8::from_str(value.0).map_err(|_err| WBDLError)?, value.1, value.2)).map_err(|_err| WBDLError)
     }
 }
 
