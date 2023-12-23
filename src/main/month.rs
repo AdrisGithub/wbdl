@@ -136,3 +136,47 @@ impl TryFrom<&str> for Month {
         Month::try_from(usize::from_str(value).map_err(|_err| WBDLError)?)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{Month, Season};
+
+    #[test]
+    pub fn correct_season() {
+        let month = Month::December;
+        assert_eq!(month.get_season(), Season::Winter)
+    }
+    #[test]
+    pub fn incorrect_season() {
+        let month = Month::December;
+        assert_ne!(month.get_season(), Season::Spring)
+    }
+
+    #[test]
+    pub fn parse_from_str(){
+        let string = "1";
+        assert_eq!(Month::try_from(string),Ok(Month::MIN))
+    }
+    #[test]
+    #[should_panic]
+    pub fn fail_parse_from_str(){
+        let string = "Hello";
+        Month::try_from(string).unwrap();
+    }
+    #[test]
+    #[should_panic]
+    pub fn fail_parse_from_str_with_too_large_content(){
+        let string = "14";
+        Month::try_from(string).unwrap();
+    }
+    #[test]
+    pub fn correct_previous(){
+        let first = Month::MIN;
+        assert_eq!(first.previous(),Month::MAX)
+    }
+    #[test]
+    pub fn correct_next(){
+        let last = Month::MAX;
+        assert_eq!(last.next(),Month::MIN)
+    }
+}
