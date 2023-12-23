@@ -6,7 +6,7 @@ use std::time::SystemTime;
 use crate::error::WBDLError;
 use crate::month::Month;
 use crate::time::{Day, Hour, Minute, Second};
-use crate::util::{EPOCH_YEAR, get_date_time};
+use crate::util::{get_date_time, EPOCH_YEAR};
 
 #[derive(Eq, Copy, Clone, PartialEq)]
 pub struct Date {
