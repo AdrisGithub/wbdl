@@ -6,7 +6,7 @@ use std::time::SystemTime;
 use crate::error::WBDLError;
 use crate::month::Month;
 use crate::time::{Day, Hour, Minute, Second};
-use crate::util::{get_date_time, EPOCH_YEAR};
+use crate::util::{EPOCH_YEAR, get_date_time};
 
 #[derive(Eq, Copy, Clone, PartialEq)]
 pub struct Date {
@@ -80,6 +80,14 @@ impl PartialOrd for Date {
 }
 
 impl Date {
+    pub const UNIX_EPOCH: Date = Date {
+        month: Month::MIN,
+        year: EPOCH_YEAR,
+        day: Day::MIN,
+        hour: Hour::MIN,
+        second: Second::MIN,
+        minute: Minute::MIN,
+    };
     pub fn now_unchecked() -> Date {
         Date::now().unwrap()
     }
@@ -90,9 +98,6 @@ impl Date {
                 .map(|va| va.as_secs())
                 .map_err(|_err| WBDLError)?,
         )
-    }
-    pub fn unix_epoch() -> Date {
-        Date::try_from(0).unwrap()
     }
     pub fn add_min(&mut self) {
         if self.minute == Minute::MAX {
