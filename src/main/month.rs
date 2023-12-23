@@ -33,10 +33,10 @@ impl Month {
         Season::from(self)
     }
     pub fn ordinal(&self) -> usize {
-        self.clone() as usize
+        *self as usize
     }
     pub const fn next(&self) -> Month {
-        return match self {
+        match self {
             Month::January => Month::February,
             Month::February => Month::March,
             Month::March =>  Month::April,
@@ -51,8 +51,8 @@ impl Month {
             Month::December => Month::January
         }
     }
-    pub fn previous(&self) -> Month {
-        return match self {
+    pub const fn previous(&self) -> Month {
+        match self {
             Month::January => Month::December,
             Month::February => Month::January,
             Month::March => Month::February,
@@ -71,7 +71,7 @@ impl Month {
 
 impl Season {
     pub fn ordinal(&self) -> usize {
-        self.clone() as usize
+        *self as usize
     }
     pub const MIN: Season = Season::Spring;
     pub const MAX: Season = Season::Winter;
