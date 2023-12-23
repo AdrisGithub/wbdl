@@ -30,7 +30,7 @@ impl PartialOrd for Date {
             None
         }
     }
-
+    #[allow(clippy::comparison_chain)]
     fn lt(&self, other: &Self) -> bool {
         if self.year < other.year {
             return true;
@@ -44,20 +44,20 @@ impl PartialOrd for Date {
         }
         if self.day < other.day {
             return true;
-        } else if self.day < other.day {
+        } else if self.day > other.day {
             return false;
         }
         if self.hour < other.hour {
             return true;
-        } else if self.hour < other.hour {
+        } else if self.hour > other.hour {
             return false;
         }
         if self.minute < other.minute {
             return true;
-        } else if self.minute < other.minute {
+        } else if self.minute > other.minute {
             return false;
         }
-        return self.second < other.second;
+        self.second < other.second
     }
     fn le(&self, other: &Self) -> bool {
         if self == other {
