@@ -1,0 +1,17 @@
+[package]
+name = "wbdl"
+version = "0.0.0"
+edition = "2021"
+authors = ["Adriiii"]
+description = "Wizards in Memory Cache Models"
+readme = "README.md"
+repository = "https://github.com/AdrisGithub/wbdl"
+license = "GPL-2.0-or-later"
+documentation = "https://docs.rs/wbdl"
+exclude = ["src/resources/", ".github/", "sonar-project.properties"]
+
+
+[lib]
+path = "src/main/lib.rs"
+
+[dependencies]
