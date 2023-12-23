@@ -45,7 +45,11 @@ impl Day {
         [
             0,
             31,
-            if crate::util::is_leap_year(year) { 29 } else { 28 },
+            if crate::util::is_leap_year(year) {
+                29
+            } else {
+                28
+            },
             31,
             30,
             31,
@@ -117,7 +121,6 @@ impl Second {
     }
 }
 
-
 impl Display for Hour {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         std::fmt::Display::fmt(&self.0, f)
@@ -152,7 +155,12 @@ impl TryFrom<&str> for Hour {
 impl TryFrom<(&str, u16, Month)> for Day {
     type Error = WBDLError;
     fn try_from(value: (&str, u16, Month)) -> Result<Self, Self::Error> {
-        Day::try_from((u8::from_str(value.0).map_err(|_err| WBDLError)?, value.1, value.2)).map_err(|_err| WBDLError)
+        Day::try_from((
+            u8::from_str(value.0).map_err(|_err| WBDLError)?,
+            value.1,
+            value.2,
+        ))
+        .map_err(|_err| WBDLError)
     }
 }
 
