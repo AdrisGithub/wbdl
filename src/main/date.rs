@@ -193,6 +193,17 @@ impl TryFrom<u64> for Date {
     }
 }
 
+impl TryFrom<SystemTime> for Date {
+    type Error = WBDLError;
+    fn try_from(value: SystemTime) -> Result<Self, Self::Error> {
+        value
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .map(|val| val.as_secs())
+            .map(Date::try_from)
+            .map_err(|_err| WBDLError)?
+    }
+}
+
 impl TryFrom<String> for Date {
     type Error = WBDLError;
     fn try_from(value: String) -> Result<Self, Self::Error> {
@@ -240,13 +251,66 @@ impl Debug for Date {
 
 #[cfg(test)]
 mod tests {
+    use std::time::SystemTime;
+
     use crate::date::Date;
 
     #[test]
     pub fn date_now() {
         let now = Date::now();
-        let now = now.map(|val| val.to_string()).map(Date::try_from);
-        println!("{:?} {:?}", now, Date::unix_epoch());
-        println!("{}", Date::now().unwrap() == Date::unix_epoch())
+        print!("{:?}", now.unwrap());
+    }
+
+    #[test]
+    #[allow(clippy::unnecessary_literal_unwrap)]
+    pub fn mapping() {
+        let pre = Some(Date::UNIX_EPOCH);
+        let post = pre.map(|val| val.to_string()).map(Date::try_from).unwrap();
+        assert_eq!(pre.unwrap(), post.unwrap())
+    }
+
+    #[test]
+    pub fn equals() {
+        let first = Date::UNIX_EPOCH;
+        let second = Date::UNIX_EPOCH;
+        assert_eq!(first, second);
+        assert!(!(first > second));
+        assert!(!(first < second));
+    }
+
+    #[test]
+    pub fn not_equals() {
+        let first = Date::UNIX_EPOCH;
+        let second = Date::now().unwrap();
+        assert_ne!(first, second);
+        assert!(!(first > second));
+        assert!(first < second);
+    }
+
+    #[test]
+    pub fn bigger() {
+        let first = Date::UNIX_EPOCH;
+        let mut second = Date::UNIX_EPOCH;
+        second.add_second();
+        assert_ne!(first, second);
+        assert!(first < second);
+        assert!(!(first > second));
+    }
+
+    #[test]
+    pub fn smaller() {
+        let mut first = Date::UNIX_EPOCH;
+        let second = Date::UNIX_EPOCH;
+        first.add_second();
+        assert_ne!(first, second);
+        assert!(!(first < second));
+        assert!(first > second);
+    }
+
+    #[test]
+    pub fn unix_epoch() {
+        let first = Date::UNIX_EPOCH;
+        let second = Date::try_from(SystemTime::UNIX_EPOCH).unwrap();
+        assert_eq!(first, second)
     }
 }
