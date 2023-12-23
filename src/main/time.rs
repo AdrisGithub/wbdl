@@ -37,7 +37,7 @@ impl Hour {
 }
 
 impl Day {
-    pub const MIN: Day = Day(0);
+    pub const MIN: Day = Day(1);
     pub fn max(year: u16, month: Month) -> Day {
         Self(Day::get_days_per_month(year)[month.ordinal()])
     }
