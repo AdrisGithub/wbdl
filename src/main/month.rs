@@ -39,16 +39,16 @@ impl Month {
         match self {
             Month::January => Month::February,
             Month::February => Month::March,
-            Month::March =>  Month::April,
-            Month::April =>  Month::May,
+            Month::March => Month::April,
+            Month::April => Month::May,
             Month::May => Month::June,
             Month::June => Month::July,
-            Month::July =>  Month::August,
-            Month::August =>  Month::September,
+            Month::July => Month::August,
+            Month::August => Month::September,
             Month::September => Month::October,
-            Month::October =>  Month::November,
+            Month::October => Month::November,
             Month::November => Month::December,
-            Month::December => Month::January
+            Month::December => Month::January,
         }
     }
     pub const fn previous(&self) -> Month {
@@ -64,7 +64,7 @@ impl Month {
             Month::September => Month::August,
             Month::October => Month::September,
             Month::November => Month::October,
-            Month::December => Month::November
+            Month::December => Month::November,
         }
     }
 }
@@ -104,7 +104,7 @@ impl TryFrom<usize> for Season {
             2 => Ok(Season::Summer),
             3 => Ok(Season::Autumn),
             4 => Ok(Season::Winter),
-            _ => Err(WBDLError)
+            _ => Err(WBDLError),
         }
     }
 }
@@ -125,7 +125,7 @@ impl TryFrom<usize> for Month {
             10 => Ok(Month::October),
             11 => Ok(Month::November),
             12 => Ok(Month::December),
-            _ => Err(WBDLError)
+            _ => Err(WBDLError),
         }
     }
 }
