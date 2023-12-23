@@ -221,3 +221,39 @@ impl TryFrom<u8> for Second {
         }
     }
 }
+
+#[cfg(test)]
+mod tests{
+    use crate::{Hour, Minute};
+
+    #[test]
+    pub fn correct_next_hour(){
+        let last = Hour::MAX;
+        assert_eq!(last.next(),Hour::MIN);
+    }
+    #[test]
+    pub fn correct_next_minute(){
+        let last = Minute::MAX;
+        assert_eq!(last.next(),Minute::MIN);
+    }
+    #[test]
+    pub fn correct_next_second(){
+        let last = Minute::MAX;
+        assert_eq!(last.next(),Minute::MIN);
+    }
+    #[test]
+    pub fn correct_previous_hour(){
+        let last = Hour::MIN;
+        assert_eq!(last.previous(),Hour::MAX);
+    }
+    #[test]
+    pub fn correct_previous_minute(){
+        let last = Minute::MIN;
+        assert_eq!(last.previous(),Minute::MAX);
+    }
+    #[test]
+    pub fn correct_previous_second(){
+        let last = Minute::MIN;
+        assert_eq!(last.previous(),Minute::MAX);
+    }
+}
