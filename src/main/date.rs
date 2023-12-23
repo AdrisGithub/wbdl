@@ -6,7 +6,7 @@ use std::time::SystemTime;
 use crate::error::WBDLError;
 use crate::month::Month;
 use crate::time::{Day, Hour, Minute, Second};
-use crate::util::{EPOCH_YEAR, get_date_time};
+use crate::util::{get_date_time, EPOCH_YEAR};
 
 #[derive(Eq, Copy, Clone, PartialEq)]
 pub struct Date {
@@ -84,7 +84,12 @@ impl Date {
         Date::now().unwrap()
     }
     pub fn now() -> Result<Date, WBDLError> {
-        Self::try_from(SystemTime::UNIX_EPOCH.elapsed().map(|va| va.as_secs()).map_err(|_err| WBDLError)?)
+        Self::try_from(
+            SystemTime::UNIX_EPOCH
+                .elapsed()
+                .map(|va| va.as_secs())
+                .map_err(|_err| WBDLError)?,
+        )
     }
     pub fn unix_epoch() -> Date {
         Date::try_from(0).unwrap()
@@ -142,26 +147,26 @@ impl Date {
         self.add_year();
         self.reset_until_months();
     }
-    pub fn reset_until_seconds(&mut self){
+    pub fn reset_until_seconds(&mut self) {
         self.second = Second::MIN;
     }
-    pub fn reset_until_minutes(&mut self){
+    pub fn reset_until_minutes(&mut self) {
         self.reset_until_seconds();
         self.second = Second::MIN;
     }
-    pub fn reset_until_hours(&mut self){
+    pub fn reset_until_hours(&mut self) {
         self.reset_until_minutes();
         self.hour = Hour::MIN;
     }
-    pub fn reset_until_days(&mut self){
+    pub fn reset_until_days(&mut self) {
         self.reset_until_hours();
         self.day = Day::MIN;
     }
-    pub fn reset_until_months(&mut self){
+    pub fn reset_until_months(&mut self) {
         self.reset_until_days();
         self.month = Month::MIN;
     }
-    pub fn reset_until_years(&mut self){
+    pub fn reset_until_years(&mut self) {
         self.reset_until_months();
         self.year = EPOCH_YEAR;
     }
@@ -189,7 +194,11 @@ impl TryFrom<String> for Date {
         let mut split = value.split('T');
         let mut date = split.next().ok_or(WBDLError)?.split('-');
         let mut time = split.next().ok_or(WBDLError)?.split(':');
-        let year = date.next().map(u16::from_str).ok_or(WBDLError)?.map_err(|_err| WBDLError)?;
+        let year = date
+            .next()
+            .map(u16::from_str)
+            .ok_or(WBDLError)?
+            .map_err(|_err| WBDLError)?;
         let month = Month::try_from(date.next().ok_or(WBDLError)?)?;
         Ok(Self {
             year,
@@ -205,7 +214,16 @@ impl TryFrom<String> for Date {
 impl Display for Date {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         //"2004-06-14T23:34:30"
-        write!(f, "{}-{}-{}T{}:{}:{}", self.year, self.month.ordinal(), self.day, self.hour, self.minute, self.second)
+        write!(
+            f,
+            "{}-{}-{}T{}:{}:{}",
+            self.year,
+            self.month.ordinal(),
+            self.day,
+            self.hour,
+            self.minute,
+            self.second
+        )
     }
 }
 
@@ -227,6 +245,3 @@ mod tests {
         println!("{}", Date::now().unwrap() == Date::unix_epoch())
     }
 }
-
-
-
