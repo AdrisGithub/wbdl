@@ -6,7 +6,7 @@ const SECONDS_PER_DAY: u32 = 24u32 * SECONDS_PER_HOUR as u32;
 const DAYS_PER_YEAR: u16 = 365;
 const DAYS_PER_LEAP_YEAR: u16 = DAYS_PER_YEAR + 1;
 const EPOCH_MONTH: u8 = 1;
-pub(crate)const EPOCH_YEAR: u16 = 1970;
+pub(crate) const EPOCH_YEAR: u16 = 1970;
 
 pub const fn is_leap_year(year: u16) -> bool {
     year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)
