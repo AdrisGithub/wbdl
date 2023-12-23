@@ -222,7 +222,7 @@ mod tests {
     #[test]
     pub fn date_now() {
         let now = Date::now();
-        let now = now.map(|val| val.to_string()).map(|val| Date::try_from(val));
+        let now = now.map(|val| val.to_string()).map(Date::try_from);
         println!("{:?} {:?}", now, Date::unix_epoch());
         println!("{}", Date::now().unwrap() == Date::unix_epoch())
     }
