@@ -1,9 +1,9 @@
 [package]
 name = "wbdl"
-version = "1.0.3"
+version = "1.0.4"
 edition = "2021"
 authors = ["Adriiii"]
-description = "Wizards in Memory Cache Models"
+description = "Wizards Basic Date library"
 readme = "README.md"
 repository = "https://github.com/AdrisGithub/wbdl"
 license = "GPL-2.0-or-later"
