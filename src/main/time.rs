@@ -160,7 +160,7 @@ impl TryFrom<(&str, u16, Month)> for Day {
             value.1,
             value.2,
         ))
-        .map_err(|_err| WBDLError)
+            .map_err(|_err| WBDLError)
     }
 }
 
@@ -223,37 +223,49 @@ impl TryFrom<u8> for Second {
 }
 
 #[cfg(test)]
-mod tests{
-    use crate::{Hour, Minute};
+mod tests {
+    use crate::{Date, Hour, Minute};
 
     #[test]
-    pub fn correct_next_hour(){
+    pub fn correct_next_hour() {
         let last = Hour::MAX;
-        assert_eq!(last.next(),Hour::MIN);
+        assert_eq!(last.next(), Hour::MIN);
     }
+
     #[test]
-    pub fn correct_next_minute(){
+    pub fn correct_next_minute() {
         let last = Minute::MAX;
-        assert_eq!(last.next(),Minute::MIN);
+        assert_eq!(last.next(), Minute::MIN);
     }
+
     #[test]
-    pub fn correct_next_second(){
+    pub fn correct_next_second() {
         let last = Minute::MAX;
-        assert_eq!(last.next(),Minute::MIN);
+        assert_eq!(last.next(), Minute::MIN);
     }
+
     #[test]
-    pub fn correct_previous_hour(){
+    pub fn correct_previous_hour() {
         let last = Hour::MIN;
-        assert_eq!(last.previous(),Hour::MAX);
+        assert_eq!(last.previous(), Hour::MAX);
     }
+
     #[test]
-    pub fn correct_previous_minute(){
+    pub fn correct_previous_minute() {
         let last = Minute::MIN;
-        assert_eq!(last.previous(),Minute::MAX);
+        assert_eq!(last.previous(), Minute::MAX);
     }
+
     #[test]
-    pub fn correct_previous_second(){
+    pub fn correct_previous_second() {
         let last = Minute::MIN;
-        assert_eq!(last.previous(),Minute::MAX);
+        assert_eq!(last.previous(), Minute::MAX);
+    }
+
+    #[test]
+    pub fn weird_date_test() {
+        let mut last = Date::try_from(String::from("2000-11-30T0:0:0")).unwrap();
+        last.add_day();
+        assert_eq!(last, Date::try_from("2000-12-1T0:0:0").unwrap())
     }
 }

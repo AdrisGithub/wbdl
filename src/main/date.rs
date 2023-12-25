@@ -6,7 +6,7 @@ use std::time::SystemTime;
 use crate::error::WBDLError;
 use crate::month::Month;
 use crate::time::{Day, Hour, Minute, Second};
-use crate::util::{get_date_time, EPOCH_YEAR};
+use crate::util::{EPOCH_YEAR, get_date_time};
 
 #[derive(Eq, Copy, Clone, PartialEq)]
 pub struct Date {
@@ -118,10 +118,11 @@ impl Date {
         self.second = self.second.next();
     }
     pub fn add_day(&mut self) {
+        let old = (self.year, self.month);
         if self.day >= Day::max(self.year, self.month) {
             self.add_month();
         }
-        self.day = self.day.next(self.year, self.month);
+        self.day = self.day.next(old.0, old.1);
     }
     pub fn add_month(&mut self) {
         if self.month.eq(&Month::December) {
@@ -193,20 +194,9 @@ impl TryFrom<u64> for Date {
     }
 }
 
-impl TryFrom<SystemTime> for Date {
+impl TryFrom<&str> for Date {
     type Error = WBDLError;
-    fn try_from(value: SystemTime) -> Result<Self, Self::Error> {
-        value
-            .duration_since(SystemTime::UNIX_EPOCH)
-            .map(|val| val.as_secs())
-            .map(Date::try_from)
-            .map_err(|_err| WBDLError)?
-    }
-}
-
-impl TryFrom<String> for Date {
-    type Error = WBDLError;
-    fn try_from(value: String) -> Result<Self, Self::Error> {
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
         let mut split = value.split('T');
         let mut date = split.next().ok_or(WBDLError)?.split('-');
         let mut time = split.next().ok_or(WBDLError)?.split(':');
@@ -224,6 +214,24 @@ impl TryFrom<String> for Date {
             minute: Minute::try_from(time.next().ok_or(WBDLError)?)?,
             second: Second::try_from(time.next().ok_or(WBDLError)?)?,
         })
+    }
+}
+
+impl TryFrom<SystemTime> for Date {
+    type Error = WBDLError;
+    fn try_from(value: SystemTime) -> Result<Self, Self::Error> {
+        value
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .map(|val| val.as_secs())
+            .map(Date::try_from)
+            .map_err(|_err| WBDLError)?
+    }
+}
+
+impl TryFrom<String> for Date {
+    type Error = WBDLError;
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        Self::try_from(value.as_str())
     }
 }
 
