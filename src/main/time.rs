@@ -64,7 +64,7 @@ impl Day {
     }
     pub fn next(&self, year: u16, month: Month) -> Day {
         let info = Day::get_days_per_month(year)[month.ordinal()];
-        if self.0 == info {
+        if self.0 >= info {
             Day::MIN
         } else {
             Day(self.0 + 1)
