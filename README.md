@@ -14,5 +14,5 @@ Import the library into your Cargo.toml
 
 ```toml
 [dependencies]
-wbdl = "1.0.2"
+wbdl = "1.0.3"
 ```
