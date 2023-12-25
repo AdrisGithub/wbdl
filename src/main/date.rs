@@ -100,25 +100,25 @@ impl Date {
         )
     }
     pub fn add_min(&mut self) {
-        if self.minute == Minute::MAX {
+        if self.minute >= Minute::MAX {
             self.add_hour();
         }
         self.minute = self.minute.next();
     }
     pub fn add_hour(&mut self) {
-        if self.hour == Hour::MAX {
+        if self.hour >= Hour::MAX {
             self.add_day();
         }
         self.hour = self.hour.next();
     }
     pub fn add_second(&mut self) {
-        if self.second == Second::MAX {
+        if self.second >= Second::MAX {
             self.add_min();
         }
         self.second = self.second.next();
     }
     pub fn add_day(&mut self) {
-        if self.day == Day::max(self.year, self.month) {
+        if self.day >= Day::max(self.year, self.month) {
             self.add_month();
         }
         self.day = self.day.next(self.year, self.month);
