@@ -160,7 +160,7 @@ impl TryFrom<(&str, u16, Month)> for Day {
             value.1,
             value.2,
         ))
-            .map_err(|_err| WBDLError)
+        .map_err(|_err| WBDLError)
     }
 }
 

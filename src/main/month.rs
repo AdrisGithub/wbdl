@@ -153,30 +153,30 @@ mod tests {
     }
 
     #[test]
-    pub fn parse_from_str(){
+    pub fn parse_from_str() {
         let string = "1";
-        assert_eq!(Month::try_from(string),Ok(Month::MIN))
+        assert_eq!(Month::try_from(string), Ok(Month::MIN))
     }
     #[test]
     #[should_panic]
-    pub fn fail_parse_from_str(){
+    pub fn fail_parse_from_str() {
         let string = "Hello";
         Month::try_from(string).unwrap();
     }
     #[test]
     #[should_panic]
-    pub fn fail_parse_from_str_with_too_large_content(){
+    pub fn fail_parse_from_str_with_too_large_content() {
         let string = "14";
         Month::try_from(string).unwrap();
     }
     #[test]
-    pub fn correct_previous(){
+    pub fn correct_previous() {
         let first = Month::MIN;
-        assert_eq!(first.previous(),Month::MAX)
+        assert_eq!(first.previous(), Month::MAX)
     }
     #[test]
-    pub fn correct_next(){
+    pub fn correct_next() {
         let last = Month::MAX;
-        assert_eq!(last.next(),Month::MIN)
+        assert_eq!(last.next(), Month::MIN)
     }
 }
