@@ -228,6 +228,15 @@ impl TryFrom<SystemTime> for Date {
     }
 }
 
+impl Iterator for Date {
+    type Item = Self;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.add_second();
+        Some(*self)
+    }
+}
+
 impl TryFrom<String> for Date {
     type Error = WBDLError;
     fn try_from(value: String) -> Result<Self, Self::Error> {
