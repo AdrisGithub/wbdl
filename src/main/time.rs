@@ -264,8 +264,7 @@ mod tests {
 
     #[test]
     pub fn weird_date_test() {
-        let mut last = Date::try_from(String::from("2000-11-30T0:0:0")).unwrap();
-        last.add_day();
-        assert_eq!(last, Date::try_from("2000-12-1T0:0:0").unwrap())
+        let last = Date::try_from(String::from("2000-11-30T0:0:0")).unwrap();
+        assert_eq!(last.add_day(), Date::try_from("2000-12-1T0:0:0").unwrap())
     }
 }
