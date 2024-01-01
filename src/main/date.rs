@@ -8,7 +8,7 @@ use crate::month::Month;
 use crate::time::{Day, Hour, Minute, Second};
 use crate::util::{get_date_time, EPOCH_YEAR};
 
-#[derive(Eq, Copy, Clone, PartialEq)]
+#[derive(Eq, Copy, Clone, PartialEq,Hash)]
 pub struct Date {
     day: Day,
     month: Month,
@@ -16,6 +16,11 @@ pub struct Date {
     hour: Hour,
     minute: Minute,
     second: Second,
+}
+impl Default for Date{
+    fn default() -> Self {
+        Date::UNIX_EPOCH
+    }
 }
 
 impl PartialOrd for Date {
@@ -99,82 +104,89 @@ impl Date {
                 .map_err(|_err| WBDLError)?,
         )
     }
-    pub fn add_min(&mut self) {
+    pub fn add_min(mut self) -> Self {
         if self.minute >= Minute::MAX {
             self.add_hour();
         }
         self.minute = self.minute.next();
+        self
     }
-    pub fn add_hour(&mut self) {
+    pub fn add_hour(mut self) -> Self{
         if self.hour >= Hour::MAX {
             self.add_day();
         }
         self.hour = self.hour.next();
+        self
     }
-    pub fn add_second(&mut self) {
+    pub fn add_second(mut self) -> Self {
         if self.second >= Second::MAX {
             self.add_min();
         }
         self.second = self.second.next();
+        self
     }
-    pub fn add_day(&mut self) {
+    pub fn add_day(mut self) -> Self {
         let old = (self.year, self.month);
         if self.day >= Day::max(self.year, self.month) {
             self.add_month();
         }
         self.day = self.day.next(old.0, old.1);
+        self
     }
-    pub fn add_month(&mut self) {
+    pub fn add_month(mut self) -> Self {
         if self.month.eq(&Month::December) {
             self.add_year();
         }
         self.month = self.month.next();
+        self
     }
-    pub fn add_year(&mut self) {
+    pub const fn add_year(mut self) -> Self {
         self.year += 1;
+        self
     }
-    pub fn next_minute(&mut self) {
+    pub fn next_minute(self) -> Self {
         self.add_min();
-        self.reset_until_seconds();
+        self.reset_until_seconds()
     }
-    pub fn next_hour(&mut self) {
+    pub fn next_hour(self) -> Self{
         self.add_hour();
-        self.reset_until_minutes();
+        self.reset_until_minutes()
     }
-    pub fn next_day(&mut self) {
+    pub fn next_day(self) -> Self {
         self.add_day();
-        self.reset_until_hours();
+        self.reset_until_hours()
     }
-    pub fn next_month(&mut self) {
+    pub fn next_month(self) -> Self {
         self.add_month();
-        self.reset_until_days();
+        self.reset_until_days()
     }
-    pub fn next_year(&mut self) {
+    pub fn next_year(self) -> Self {
         self.add_year();
-        self.reset_until_months();
+        self.reset_until_months()
     }
-    pub fn reset_until_seconds(&mut self) {
+    pub const fn reset_until_seconds(mut self) -> Self {
         self.second = Second::MIN;
+        self
     }
-    pub fn reset_until_minutes(&mut self) {
-        self.reset_until_seconds();
+    pub const fn reset_until_minutes(mut self) -> Self {
         self.second = Second::MIN;
+        self.reset_until_seconds()
     }
-    pub fn reset_until_hours(&mut self) {
-        self.reset_until_minutes();
+    pub const fn reset_until_hours(mut self) -> Self {
         self.hour = Hour::MIN;
+        self.reset_until_minutes()
     }
-    pub fn reset_until_days(&mut self) {
-        self.reset_until_hours();
+    pub const fn reset_until_days(mut self) -> Self {
         self.day = Day::MIN;
+        self.reset_until_hours()
     }
-    pub fn reset_until_months(&mut self) {
-        self.reset_until_days();
+    pub const fn reset_until_months(mut self) -> Self {
         self.month = Month::MIN;
+        self.reset_until_days()
     }
-    pub fn reset_until_years(&mut self) {
-        self.reset_until_months();
+    pub const fn reset_until_years(mut self) -> Self {
         self.year = EPOCH_YEAR;
+        self.reset_until_months()
     }
 }
 
@@ -308,8 +320,7 @@ mod tests {
     #[test]
     pub fn bigger() {
         let first = Date::UNIX_EPOCH;
-        let mut second = Date::UNIX_EPOCH;
-        second.add_second();
+        let second = Date::UNIX_EPOCH.add_second();
         assert_ne!(first, second);
         assert!(first < second);
         assert!(!(first > second));
@@ -317,9 +328,8 @@ mod tests {
 
     #[test]
     pub fn smaller() {
-        let mut first = Date::UNIX_EPOCH;
+        let first = Date::UNIX_EPOCH.add_second();
         let second = Date::UNIX_EPOCH;
-        first.add_second();
         assert_ne!(first, second);
         assert!(!(first < second));
         assert!(first > second);
